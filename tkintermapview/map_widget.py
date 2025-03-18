@@ -364,8 +364,9 @@ class TkinterMapView(tkinter.Frame):
         else:
             return False
 
-    def set_marker(self, deg_x: float, deg_y: float, text: str = None, **kwargs) -> CanvasPositionMarker:
-        marker = CanvasPositionMarker(self, (deg_x, deg_y), text=text, **kwargs)
+    def set_marker(self, deg_x: float, deg_y: float, text: str = None, marker_type: str = "default",
+                   **kwargs) -> CanvasPositionMarker:
+        marker = CanvasPositionMarker(self, (deg_x, deg_y), text=text, marker_type=marker_type, **kwargs)
         marker.draw()
         self.canvas_marker_list.append(marker)
         return marker
@@ -861,27 +862,32 @@ class TkinterMapView(tkinter.Frame):
                     self.after(1, self.fading_move)
 
     def set_zoom(self, zoom: int, relative_pointer_x: float = 0.5, relative_pointer_y: float = 0.5):
-
-        mouse_tile_pos_x = self.upper_left_tile_pos[0] + (self.lower_right_tile_pos[0] - self.upper_left_tile_pos[0]) * relative_pointer_x
-        mouse_tile_pos_y = self.upper_left_tile_pos[1] + (self.lower_right_tile_pos[1] - self.upper_left_tile_pos[1]) * relative_pointer_y
+        mouse_tile_pos_x = self.upper_left_tile_pos[0] + (
+                    self.lower_right_tile_pos[0] - self.upper_left_tile_pos[0]) * relative_pointer_x
+        mouse_tile_pos_y = self.upper_left_tile_pos[1] + (
+                    self.lower_right_tile_pos[1] - self.upper_left_tile_pos[1]) * relative_pointer_y
 
         current_deg_mouse_position = osm_to_decimal(mouse_tile_pos_x,
                                                     mouse_tile_pos_y,
                                                     round(self.zoom))
+
         self.zoom = zoom
 
-        if self.zoom > self.max_zoom:
-            self.zoom = self.max_zoom
-        if self.zoom < self.min_zoom:
-            self.zoom = self.min_zoom
+        # Изменить эти строки
+        if self.zoom > 17:  # Ограничиваем максимальный zoom до 17
+            self.zoom = 17
+        if self.zoom < 10:  # Ограничиваем минимальный zoom до 10
+            self.zoom = 10
 
         current_tile_mouse_position = decimal_to_osm(*current_deg_mouse_position, round(self.zoom))
 
         self.upper_left_tile_pos = (current_tile_mouse_position[0] - relative_pointer_x * (self.width / self.tile_size),
-                                    current_tile_mouse_position[1] - relative_pointer_y * (self.height / self.tile_size))
+                                    current_tile_mouse_position[1] - relative_pointer_y * (
+                                                self.height / self.tile_size))
 
-        self.lower_right_tile_pos = (current_tile_mouse_position[0] + (1 - relative_pointer_x) * (self.width / self.tile_size),
-                                     current_tile_mouse_position[1] + (1 - relative_pointer_y) * (self.height / self.tile_size))
+        self.lower_right_tile_pos = (
+        current_tile_mouse_position[0] + (1 - relative_pointer_x) * (self.width / self.tile_size),
+        current_tile_mouse_position[1] + (1 - relative_pointer_y) * (self.height / self.tile_size))
 
         if round(self.zoom) != round(self.last_zoom):
             self.check_map_border_crossing()
