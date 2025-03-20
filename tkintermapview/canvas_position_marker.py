@@ -164,27 +164,16 @@ class CanvasPositionMarker:
                     if self.marker_type == "default":
                         # Стандартный маркер (существующий код)
                         if self.polygon is None:
-                            self.polygon = self.map_widget.canvas.create_polygon(canvas_pos_x - 14, canvas_pos_y - 23,
+                            self.polygon = self.map_widget.canvas.create_polygon(canvas_pos_x - 8, canvas_pos_y - 14,
                                                                                  canvas_pos_x, canvas_pos_y,
-                                                                                 canvas_pos_x + 14, canvas_pos_y - 23,
+                                                                                 canvas_pos_x + 8, canvas_pos_y - 14,
                                                                                  fill=self.marker_color_outside,
-                                                                                 width=2,
+                                                                                 width=1,
                                                                                  outline=self.marker_color_outside,
                                                                                  tag="marker")
-                            if self.command is not None:
-                                self.map_widget.canvas.tag_bind(self.polygon, "<Enter>", self.mouse_enter)
-                                self.map_widget.canvas.tag_bind(self.polygon, "<Leave>", self.mouse_leave)
-                                self.map_widget.canvas.tag_bind(self.polygon, "<Button-1>", self.click)
-                        else:
-                            self.map_widget.canvas.coords(self.polygon,
-                                                          canvas_pos_x - 14, canvas_pos_y - 23,
-                                                          canvas_pos_x, canvas_pos_y,
-                                                          canvas_pos_x + 14, canvas_pos_y - 23)
-
-                        if self.big_circle is None:
-                            self.big_circle = self.map_widget.canvas.create_oval(canvas_pos_x - 14, canvas_pos_y - 45,
-                                                                                 canvas_pos_x + 14, canvas_pos_y - 17,
-                                                                                 fill=self.marker_color_circle, width=6,
+                            self.big_circle = self.map_widget.canvas.create_oval(canvas_pos_x - 8, canvas_pos_y - 28,
+                                                                                 canvas_pos_x + 8, canvas_pos_y - 12,
+                                                                                 fill=self.marker_color_circle, width=3,
                                                                                  outline=self.marker_color_outside,
                                                                                  tag="marker")
                             if self.command is not None:
@@ -198,7 +187,7 @@ class CanvasPositionMarker:
 
                     elif self.marker_type == "cross":
                         # Маркер в виде крестика
-                        size = 10
+                        size = 6
                         if self.polygon is None:
                             self.polygon = self.map_widget.canvas.create_line(
                                 canvas_pos_x - size, canvas_pos_y - size,
@@ -221,7 +210,7 @@ class CanvasPositionMarker:
 
                     elif self.marker_type == "circle":
                         # Маркер в виде круга
-                        size = 10
+                        size = 6
                         if self.polygon is None:
                             self.polygon = self.map_widget.canvas.create_oval(
                                 canvas_pos_x - size, canvas_pos_y - size,
@@ -239,7 +228,7 @@ class CanvasPositionMarker:
 
                     elif self.marker_type == "triangle":
                         # Маркер в виде треугольника
-                        size = 12
+                        size = 6
                         if self.polygon is None:
                             self.polygon = self.map_widget.canvas.create_polygon(
                                 canvas_pos_x, canvas_pos_y - size,
